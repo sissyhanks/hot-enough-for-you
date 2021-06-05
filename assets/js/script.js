@@ -9,6 +9,10 @@ var mer;
 var cityWish;
 var newUse;
 
+function cityReset(){
+  document.getElementById( "lookUp" ).value='';
+}
+
 
 
 
@@ -22,13 +26,15 @@ fetch(requestUrl)
       if (response.status === 404) {
         alert("City not found. Please try again.");
       } else if (citySearch.length == 0) {
-        alert("Please enter a city name to begin your search");
+        alert("Please enter a city name to search.");
         return false;
       } else {
         return response.json();
       }
       
     })
+
+
 
       .then(function (data) {
         console.log(data);
@@ -37,13 +43,26 @@ fetch(requestUrl)
       mer = (data.coord.lon);
       historyName = (data.name);
       console.log(trop, mer);
-      // localStorage.setItem('cityWish', data.name);
+      localStorage.setItem('cityWish', JSON.stringify(historyName));
       // newUse = localStorage.getItem(JSON.stringify(cityWish));
+      console.log(localStorage.getItem('cityWish'));
 
       butt = document.createElement('button');
       butt.setAttribute("id", historyName);
       butt.setAttribute("class", "saved-city btn w-100 text-center mt-2")
       butt.innerText = historyName;
+
+      var list = document.getElementById("history");
+      var cities = list.getElementsByTagName("button");
+
+      console.log(cities.id);
+      // console.log(cities);
+      for (var i = 0; i < list.length; i++) {
+        console.log(cities);
+        // if (historyName == list[i].id){
+        //   cities.remove();
+        // }
+      }
 
     $( "#history" ).prepend( butt );
 
@@ -61,6 +80,7 @@ fetch(oneCall)
 
 
     })
+    cityReset();
 
   });
 
