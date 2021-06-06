@@ -40,21 +40,13 @@ function makeHistory () {
     list = document.getElementById("history");
 
     $( "#history" ).prepend( butt );
+
+    $( hSearch ).click(function(){
+  console.log("hi");
+})
 }
 
-function cityReset(){
-  document.getElementById( "lookUp" ).value='';
-}
-
-// start active script
-if (buttArr !== null){
-  makeMemory();
-}
-
-bSearch.addEventListener("click", function(){
-  citySearch = lookUp.value;
-  requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
-
+function citySpot(){
   fetch(requestUrl)
   
   .then(function (response) {
@@ -91,8 +83,71 @@ bSearch.addEventListener("click", function(){
       console.log(data);
     })
 
-
     })
+}
+
+function cityReset(){
+  document.getElementById( "lookUp" ).value='';
+}
+
+// start active script
+if (buttArr !== null){
+  makeMemory();
+}
+
+bSearch.addEventListener("click", function(){
+
+    citySearch = lookUp.value;
+  requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+  citySpot();
+  // citySearch = lookUp.value;
+  // requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+
+  // fetch(requestUrl)
+  
+  // .then(function (response) {
+  //   if (response.status === 404) {
+  //     alert("City not found. Please try again.");
+  //   } else if (citySearch.length == 0) {
+  //     alert("Please enter a city name to search.");
+  //     return false;
+  //   } else {
+  //     return response.json();
+  //   }
+  // })
+  
+  // .then(function (data) {
+  //   console.log(data);
+  //   trop = (data.coord.lat);
+  //   mer = (data.coord.lon);
+  //   historyName = (data.name);
+  //   console.log(trop, mer);
+  //   cityWish.unshift(historyName);
+  //   localStorage.setItem('wishCities', JSON.stringify(cityWish));
+    
+  //   makeHistory();
+
+  //   oneCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +JSON.stringify(trop)+ '&lon=' +JSON.stringify(mer)+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+      
+  //   fetch(oneCall)
+    
+  //   .then(function (response) {
+  //     return response.json();
+  //     })
+  //     .then(function (data) {
+  //     //Using console.log to examine the data
+  //     console.log(data);
+  //   })
+
+  //   })
     cityReset();
 
   });
+
+$( hSearch ).click(function(){
+  citySearch = this.id;
+  console.log(citySearch);
+  requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+  citySpot();
+})
+
