@@ -11,10 +11,21 @@ var newUse;
 var list = document.getElementById("history");
 var buttArr = localStorage.getItem('wishCities');
 
+var hotDiv = document.querySelector("#hotDiv");
 var hotCity = document.querySelector("#hotCity");
+var temp = document.querySelector("#temp");
 var wind = document.querySelector("#wind");
 var hu = document.querySelector("#hu");
+var uv = document.querySelector("#uuuv");
 var uvi = document.querySelector("#uv");
+var hotPic = document.querySelector("#hotPic"); 
+
+
+var aday1 = document.querySelector("#day1");
+var aday2 = document.querySelector("#day2");
+var aday3 = document.querySelector("#day3");
+var aday4 = document.querySelector("#day4");
+var aday5 = document.querySelector("#day5");
 
 
 
@@ -41,7 +52,7 @@ function makeMemory () {
 }
 
 function citySpot(){
-  requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+  requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=7eaaaf52f588cae77cc5af8d7c91c78f&units=imperial';
   fetch(requestUrl)
   
   .then(function (response) {
@@ -61,7 +72,7 @@ function citySpot(){
     mer = (data.coord.lon);
     historyName = (data.name);
 
-      oneCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +JSON.stringify(trop)+ '&lon=' +JSON.stringify(mer)+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
+      oneCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +JSON.stringify(trop)+ '&lon=' +JSON.stringify(mer)+ '&appid=7eaaaf52f588cae77cc5af8d7c91c78f&units=imperial';
     
       fetch(oneCall)
     
@@ -71,11 +82,114 @@ function citySpot(){
 
       .then(function (data) {
       //Using console.log to examine the data
+      console.log(data.current.dt);
       console.log(data);
-      hotCity.innerText = ("hi");
-      wind.innerText = (data.current.wind_speed);
-      hu.innerText = (data.current.humidity);
+
+
+// pull date out of api return
+      var fullDate = new Date(parseInt(data.current.dt) * 1000);
+
+      const month = fullDate.toLocaleString("en-US", {month: "numeric"}); 
+      const day = fullDate.toLocaleString("en-US", {day: "numeric"});
+      const year = fullDate.toLocaleString("en-US", {year: "numeric"});
+
+      var date = month + "/" + day + "/" + year;
+
+      hotCity.innerText = historyName + " " +date;
+      hotDiv.setAttribute("class", "border border-secondary container-fluid");
+      hotPic.setAttribute("src", "./assets/images/" +(data.current.weather[0].icon)+ ".png");
+      temp.innerText = "Temp: " + (data.current.temp) + "°F";
+      wind.innerText = "Wind: " + (data.current.wind_speed) + " MPH";
+      hu.innerText = "Humidity: " + (data.current.humidity) + "%";
+      uv.innerText = "UV Index: ";
       uvi.innerText = (data.current.uvi);
+
+
+      
+      aday1.setAttribute("class", "border bg-light p-3");
+      aday2.setAttribute("class", "border bg-light p-3");
+      aday3.setAttribute("class", "border bg-light p-3");
+      aday4.setAttribute("class", "border bg-light p-3");
+      aday5.setAttribute("class", "border bg-light p-3");
+       
+      
+      
+      var fullDate1 = new Date(parseInt(data.daily[1].dt) * 1000);
+
+      const month1 = fullDate1.toLocaleString("en-US", {month: "numeric"}); 
+      const day1 = fullDate1.toLocaleString("en-US", {day: "numeric"});
+      const year1 = fullDate1.toLocaleString("en-US", {year: "numeric"});
+
+      var dateYo1 = month1 + "/" + day1 + "/" + year1;
+
+      console.log(date1);
+      icon1.setAttribute("src", "./assets/images/" +(data.daily[1].weather[0].icon)+ ".png");
+      date1.innerText = (dateYo1);
+      temp1.innerText = "Temp: " + (data.daily[1].temp.day) + "°F";
+      wind1.innerText = "Wind: " + (data.daily[1].wind_speed) + " MPH";
+      hu1.innerText = "Humidity: " + (data.daily[1].humidity) + "%";
+
+      var fullDate2 = new Date(parseInt(data.daily[2].dt) * 1000);
+
+      const month2 = fullDate2.toLocaleString("en-US", {month: "numeric"}); 
+      const day2 = fullDate2.toLocaleString("en-US", {day: "numeric"});
+      const year2 = fullDate2.toLocaleString("en-US", {year: "numeric"});
+
+      var dateYo2 = month2 + "/" + day2 + "/" + year2;
+
+      console.log(date2);
+      icon2.setAttribute("src", "./assets/images/" +(data.daily[2].weather[0].icon)+ ".png");
+      date2.innerText = (dateYo2);
+      temp2.innerText = "Temp: " + (data.daily[2].temp.day) + "°F";
+      wind2.innerText = "Wind: " + (data.daily[2].wind_speed) + " MPH";
+      hu2.innerText = "Humidity: " + (data.daily[2].humidity) + "%";
+
+      var fullDate3 = new Date(parseInt(data.daily[3].dt) * 1000);
+
+      const month3 = fullDate3.toLocaleString("en-US", {month: "numeric"}); 
+      const day3 = fullDate3.toLocaleString("en-US", {day: "numeric"});
+      const year3 = fullDate3.toLocaleString("en-US", {year: "numeric"});
+
+      var dateYo3 = month3 + "/" + day3 + "/" + year3;
+
+      console.log(date3);
+      icon3.setAttribute("src", "./assets/images/" +(data.daily[3].weather[0].icon)+ ".png");
+      date3.innerText = (dateYo3);
+      temp3.innerText = "Temp: " + (data.daily[3].temp.day) + "°F";
+      wind3.innerText = "Wind: " + (data.daily[3].wind_speed) + " MPH";
+      hu3.innerText = "Humidity: " + (data.daily[3].humidity) + "%";
+
+            var fullDate4 = new Date(parseInt(data.daily[4].dt) * 1000);
+
+      const month4 = fullDate4.toLocaleString("en-US", {month: "numeric"}); 
+      const day4 = fullDate4.toLocaleString("en-US", {day: "numeric"});
+      const year4 = fullDate4.toLocaleString("en-US", {year: "numeric"});
+
+      var dateYo4 = month4 + "/" + day4 + "/" + year4;
+
+      console.log(date4);
+      icon4.setAttribute("src", "./assets/images/" +(data.daily[4].weather[0].icon)+ ".png");
+      date4.innerText = (dateYo4);
+      temp4.innerText = "Temp: " + (data.daily[4].temp.day) + "°F";
+      wind4.innerText = "Wind: " + (data.daily[4].wind_speed) + " MPH";
+      hu4.innerText = "Humidity: " + (data.daily[4].humidity) + "%";
+
+     var fullDate5 = new Date(parseInt(data.daily[5].dt) * 1000);
+
+      const month5 = fullDate5.toLocaleString("en-US", {month: "numeric"}); 
+      const day5 = fullDate5.toLocaleString("en-US", {day: "numeric"});
+      const year5 = fullDate5.toLocaleString("en-US", {year: "numeric"});
+
+      var dateYo5 = month5 + "/" + day5 + "/" + year5;
+
+      console.log(date5);
+      icon5.setAttribute("src", "./assets/images/" +(data.daily[5].weather[0].icon)+ ".png");
+      date5.innerText = (dateYo5);
+      temp5.innerText = "Temp: " + (data.daily[5].temp.day) + "°F";
+      wind5.innerText = "Wind: " + (data.daily[5].wind_speed) + " MPH";
+      hu5.innerText = "Humidity: " + (data.daily[5].humidity) + "%";
+
+
       })
 
   newInTown ();
@@ -85,9 +199,9 @@ function citySpot(){
 
 function startHistory () {
     butt = document.createElement('button');
-    butt.setAttribute("id", cityWish);
+    butt.setAttribute("id", historyName);
     butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
-    butt.innerText = cityWish;
+    butt.innerText = historyName;
 
     $( "#history" ).append( butt );
 }
