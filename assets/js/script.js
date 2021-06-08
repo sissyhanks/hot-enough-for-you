@@ -14,7 +14,7 @@ var buttArr = localStorage.getItem('wishCities');
 // if there are cities in memory from previous visit will call that data
 var cityWish; 
 if (buttArr == null) {
- cityWish = [];
+  cityWish = [];
 } else if (buttArr !== null) {
   cityWish = JSON.parse(buttArr);
 }
@@ -32,49 +32,58 @@ function makeMemory () {
   }
 }
 
-// for (let i = 0; i < list.children.length; i++){
-//   console.log(list.children[i]);
-// }
-
-
-
-// adds button of searched city to list of city search buttons
-function makeHistory () {
-  $( hSearch ).each(function( index ) {
-    console.log( index + ": " + $( this ).text() );
-    if ($( this ).text() == citySearch){
-    $( this ).remove();
-    }
-  });
-  
+function makeHistory (){
   butt = document.createElement('button');
   butt.setAttribute("id", historyName);
   butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
   butt.innerText = historyName;
   list = document.getElementById("history");
-  
+
   $( "#history" ).prepend( butt );
+}
+
+
+// adds button of searched city to list of city search buttons
+function makeHay () {
+
+  //   butt = document.createElement('button');
+  // butt.setAttribute("id", historyName);
+  // butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
+  // butt.innerText = historyName;
+  // list = document.getElementById("history");
+
+    $( hSearch ).each(function( index ) {
+    console.log( index + ": " + $( this ).text() );
+    if ($( this ).text() == citySearch){
+    $( this ).remove();
+    }
+  });
+
+  makeHistory();
+  
+  // butt = document.createElement('button');
+  // butt.setAttribute("id", historyName);
+  // butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
+  // butt.innerText = historyName;
+  // list = document.getElementById("history");
+
+
+  
+  // $( "#history" ).prepend( butt );
+
+  $( hSearch ).click(function(){
+    citySearch = this.id;
+    citySpot();
+  });
   
   cityWish = [];
   
   $( hSearch ).each(function() {
     cityWish.push($( this ).text());
     localStorage.setItem('wishCities', JSON.stringify(cityWish));
-  
-//   if ($( this ).text() == citySearch){
-//     $( this ).remove();
+  });
 
-// // localStorage.setItem('wishCities', JSON.stringify(cityWish))
-//   }
-//   console.log( hSearch);
-});
-
-    // $( hSearch ).click(function(){
-    //   citySearch = this.id;
-    //   citySpot();
-    // })
 }
-
 
 function citySpot(){
   requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
@@ -97,13 +106,13 @@ function citySpot(){
     mer = (data.coord.lon);
     historyName = (data.name);
     console.log(trop, mer);
-    cityWish.unshift(historyName);
-    localStorage.setItem('wishCities', JSON.stringify(cityWish));
+    // cityWish.unshift(historyName);
+    // localStorage.setItem('wishCities', JSON.stringify(cityWish));
     
-    makeHistory();
+    makeHay();
 
     oneCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +JSON.stringify(trop)+ '&lon=' +JSON.stringify(mer)+ '&appid=91db1e3bfaa9e864b329e2d641b22377&units=imperial';
-      
+    
     fetch(oneCall)
     
     .then(function (response) {
@@ -112,9 +121,9 @@ function citySpot(){
       .then(function (data) {
       //Using console.log to examine the data
       console.log(data);
-    })
+    });
 
-    })
+    });
 }
 
 function cityReset(){
@@ -128,17 +137,13 @@ if (buttArr !== null){
 
 console.log(hSearch.length);
 
-
-
 bSearch.addEventListener("click", function(){
   citySearch = lookUp.value;
   citySpot();
   cityReset();
-
-  });
+});
 
 $( hSearch ).click(function(){
   citySearch = this.id;
   citySpot();
 });
-
