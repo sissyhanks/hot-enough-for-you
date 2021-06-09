@@ -37,7 +37,7 @@ if (buttArr == null) {
   makeMemory();
 }
 
-// function that will make buttons of previous cities visited if stored in memory
+// function that will make buttons of previous cities visited if stored in memory and adds event listener
 function makeMemory () {
     $( ".saved-city" ).remove();
   for(var i = 0; i < JSON.parse(buttArr).length; i++){
@@ -47,7 +47,13 @@ function makeMemory () {
     butt.innerText = JSON.parse(buttArr)[i];
 
     $( "#history" ).append( butt );
+
+
   }
+      $( hSearch ).click(function(){
+  citySearch = $(this).attr("id");
+  citySpot ();
+});
 }
 
 // API call with user entered city name
@@ -199,6 +205,12 @@ function startHistory () {
     butt.innerText = historyName;
 
     $( "#history" ).append( butt );
+
+    $( hSearch ).click(function(){
+    citySearch = $(this).attr("id");
+    citySpot ();
+    cityReset();
+    });
 }
 
 // if user searches for a city that is already in history, this function is meant to remove a that button adn crate a new button, but i can't get it to work
@@ -249,13 +261,3 @@ bSearch.addEventListener("click", function(){
   citySpot ();
   cityReset();
 });
-
-// listener events buttons of previously searched cities 
-// !!!!! only works for history buttons that load after refresh (created from stored memory)
-// buttons that appear immediately after city search initiated are not heard 
-$( hSearch ).click(function(){
-  citySearch = $(this).attr("id");
-  citySpot ();
-  cityReset();
-});
-
