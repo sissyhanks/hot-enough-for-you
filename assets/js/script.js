@@ -7,7 +7,6 @@ var oneCall;
 var historyName;
 var trop;
 var mer;
-var newUse;
 var list = document.getElementById("history");
 var buttArr = localStorage.getItem('wishCities');
 
@@ -51,10 +50,12 @@ function makeMemory () {
   }
 }
 
+// API call with user entered city name
 function citySpot(){
   requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' +citySearch+ '&appid=7eaaaf52f588cae77cc5af8d7c91c78f&units=imperial';
   fetch(requestUrl)
   
+  // prompts user to re-enter information if not a city /  to enter information if text box blank
   .then(function (response) {
     if (response.status === 404) {
       alert("City not found. Please try again.");
@@ -66,12 +67,14 @@ function citySpot(){
     }
   })
   
+  // API return
   .then(function (data) {
     console.log(data);
     trop = (data.coord.lat);
     mer = (data.coord.lon);
     historyName = (data.name);
 
+      // second API call with latitude & longitude info from initial request
       oneCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +JSON.stringify(trop)+ '&lon=' +JSON.stringify(mer)+ '&appid=7eaaaf52f588cae77cc5af8d7c91c78f&units=imperial';
     
       fetch(oneCall)
@@ -82,7 +85,6 @@ function citySpot(){
 
       .then(function (data) {
       //Using console.log to examine the data
-      console.log(data.current.dt);
       console.log(data);
 
 
@@ -95,6 +97,7 @@ function citySpot(){
 
       var date = month + "/" + day + "/" + year;
 
+      // pulls out info and builds top current weather information card
       hotCity.innerText = historyName + " " +date;
       hotDiv.setAttribute("class", "border border-secondary container-fluid");
       hotPic.setAttribute("src", "./assets/images/" +(data.current.weather[0].icon)+ ".png");
@@ -103,17 +106,15 @@ function citySpot(){
       hu.innerText = "Humidity: " + (data.current.humidity) + "%";
       uv.innerText = "UV Index: ";
       uvi.innerText = (data.current.uvi);
-
-
       
+      // attributes that get the 5 day forecast cards to appear
       aday1.setAttribute("class", "border bg-light p-3");
       aday2.setAttribute("class", "border bg-light p-3");
       aday3.setAttribute("class", "border bg-light p-3");
       aday4.setAttribute("class", "border bg-light p-3");
       aday5.setAttribute("class", "border bg-light p-3");
-       
       
-      
+      // pulling out info and builds cards for 5 day forecast
       var fullDate1 = new Date(parseInt(data.daily[1].dt) * 1000);
 
       const month1 = fullDate1.toLocaleString("en-US", {month: "numeric"}); 
@@ -122,7 +123,6 @@ function citySpot(){
 
       var dateYo1 = month1 + "/" + day1 + "/" + year1;
 
-      console.log(date1);
       icon1.setAttribute("src", "./assets/images/" +(data.daily[1].weather[0].icon)+ ".png");
       date1.innerText = (dateYo1);
       temp1.innerText = "Temp: " + (data.daily[1].temp.day) + "°F";
@@ -137,7 +137,6 @@ function citySpot(){
 
       var dateYo2 = month2 + "/" + day2 + "/" + year2;
 
-      console.log(date2);
       icon2.setAttribute("src", "./assets/images/" +(data.daily[2].weather[0].icon)+ ".png");
       date2.innerText = (dateYo2);
       temp2.innerText = "Temp: " + (data.daily[2].temp.day) + "°F";
@@ -152,14 +151,13 @@ function citySpot(){
 
       var dateYo3 = month3 + "/" + day3 + "/" + year3;
 
-      console.log(date3);
       icon3.setAttribute("src", "./assets/images/" +(data.daily[3].weather[0].icon)+ ".png");
       date3.innerText = (dateYo3);
       temp3.innerText = "Temp: " + (data.daily[3].temp.day) + "°F";
       wind3.innerText = "Wind: " + (data.daily[3].wind_speed) + " MPH";
       hu3.innerText = "Humidity: " + (data.daily[3].humidity) + "%";
 
-            var fullDate4 = new Date(parseInt(data.daily[4].dt) * 1000);
+      var fullDate4 = new Date(parseInt(data.daily[4].dt) * 1000);
 
       const month4 = fullDate4.toLocaleString("en-US", {month: "numeric"}); 
       const day4 = fullDate4.toLocaleString("en-US", {day: "numeric"});
@@ -167,7 +165,6 @@ function citySpot(){
 
       var dateYo4 = month4 + "/" + day4 + "/" + year4;
 
-      console.log(date4);
       icon4.setAttribute("src", "./assets/images/" +(data.daily[4].weather[0].icon)+ ".png");
       date4.innerText = (dateYo4);
       temp4.innerText = "Temp: " + (data.daily[4].temp.day) + "°F";
@@ -182,14 +179,11 @@ function citySpot(){
 
       var dateYo5 = month5 + "/" + day5 + "/" + year5;
 
-      console.log(date5);
       icon5.setAttribute("src", "./assets/images/" +(data.daily[5].weather[0].icon)+ ".png");
       date5.innerText = (dateYo5);
       temp5.innerText = "Temp: " + (data.daily[5].temp.day) + "°F";
       wind5.innerText = "Wind: " + (data.daily[5].wind_speed) + " MPH";
       hu5.innerText = "Humidity: " + (data.daily[5].humidity) + "%";
-
-
       })
 
   newInTown ();
@@ -197,6 +191,7 @@ function citySpot(){
   })
 }
 
+// if no cities in history creates button for initial city searched, adds city name to empty array and stores array in memory
 function startHistory () {
     butt = document.createElement('button');
     butt.setAttribute("id", historyName);
@@ -206,49 +201,47 @@ function startHistory () {
     $( "#history" ).append( butt );
 }
 
-function makeHistory (){
-  $( ".saved-city" ).remove();
-  for(var i = 0; i < cityWish.length; i++){
-    butt = document.createElement('button');
-    butt.setAttribute("id", cityWish[i]);
-    butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
-    butt.innerText = cityWish[i];
+// if user searches for a city that is already in history, this function is meant to remove a that button adn crate a new button, but i can't get it to work
+// function makeHistory (){
+//   $( ".saved-city" ).remove();
+//   for(var i = 0; i < cityWish.length; i++){
+//     butt = document.createElement('button');
+//     butt.setAttribute("id", cityWish[i]);
+//     butt.setAttribute("class", "saved-city btn w-100 text-center mt-2");
+//     butt.innerText = cityWish[i];
 
-    $( "#history" ).append( butt );
-  }
-}
+//     $( "#history" ).append( butt );
+//   }
+// }
 
 function newInTown () {
-  console.log(historyName);
-
+// adds city user searches for to the end of saved city array.  If a city that is searched for is already on the array of saved city names initial entry  will be removed & new entry will be added to the end. Saves new list of cities to local storage.
   if (cityWish.indexOf(historyName) === -1){
-      cityWish.push(historyName)
-            localStorage.setItem("wishCities", JSON.stringify(cityWish));
-            startHistory ();
-  }
-  else {
-  let temparr = []
-  for(let  i=0; i<cityWish.length; i++){
+    cityWish.push(historyName)
+    localStorage.setItem("wishCities", JSON.stringify(cityWish));
+    startHistory ();
+  } else {
+    let temparr = []
+    for(let  i=0; i<cityWish.length; i++){
     
     if (cityWish[i] !== historyName){
       temparr.push(cityWish[i]);
-      // makeHistory ();
     } else {
       temparr.push(historyName);
-      console.log(historyName);
-      // makeHistory ();
     }
-    // makeHistory ();
+
   }     
   cityWish = temparr;
       localStorage.setItem("wishCities", JSON.stringify(cityWish));
   }
 }
 
+// clears input box once search initiated
 function cityReset(){
   document.getElementById( "lookUp" ).value='';
 }
 
+// search button listener event
 bSearch.addEventListener("click", function(){
   citySearch = lookUp.value;
   console.log(cityWish);
@@ -257,10 +250,11 @@ bSearch.addEventListener("click", function(){
   cityReset();
 });
 
+// listener events buttons of previously searched cities 
+// !!!!! only works for history buttons that load after refresh (created from stored memory)
+// buttons that appear immediately after city search initiated are not heard 
 $( hSearch ).click(function(){
   citySearch = $(this).attr("id");
-  console.log(cityWish);
-  console.log(citySearch);
   citySpot ();
   cityReset();
 });
