@@ -3,6 +3,33 @@
   color: gray;
 }
 
+/* color classes for styling UVI background */
+.green {
+  color: white;
+  background-color: green;
+}
+
+.yellow {
+  color: black;
+  background-color: yellow;
+}
+
+.orange {
+  color: black;
+  background-color: orange;
+}
+
+.red {
+  color: white;
+  background-color: red;
+}
+
+.violet {
+  color: white;
+  background-color: purple;
+}
+
+/* .small & #icon selectors style weather icons in 5 day forecast cards */
 .small {
   height: 30px;
 }

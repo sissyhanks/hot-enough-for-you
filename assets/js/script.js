@@ -103,6 +103,19 @@ function citySpot(){
 
       var date = month + "/" + day + "/" + year;
 
+// changes background color of UVI based on the conditions
+       if(data.current.uvi <= 2){
+         uvi.setAttribute("class", "green d-inline");
+        }else if(data.current.uvi > 2 && data.current.uvi <= 5){
+         uvi.setAttribute("class", "yellow d-inline");
+        }else if(data.current.uvi > 5 && data.current.uvi <= 7){
+         uvi.setAttribute("class", "orange d-inline");
+        }else if(data.current.uvi > 7 && data.current.uvi <= 10){
+         uvi.setAttribute("class", "red d-inline");
+        }else if(data.current.uvi > 10){
+         uvi.setAttribute("class", "violet d-inline");
+        }
+
       // pulls out info and builds top current weather information card
       hotCity.innerText = historyName + " " +date;
       hotDiv.setAttribute("class", "border border-secondary container-fluid");
@@ -112,6 +125,7 @@ function citySpot(){
       hu.innerText = "Humidity: " + (data.current.humidity) + "%";
       uv.innerText = "UV Index: ";
       uvi.innerText = (data.current.uvi);
+
       
       // attributes that get the 5 day forecast cards to appear
       aday1.setAttribute("class", "border bg-light p-3");
